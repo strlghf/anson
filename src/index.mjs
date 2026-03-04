@@ -2,7 +2,7 @@ import express from "express";
 
 const app = express();
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5173;
 
 const users = [
   {
@@ -17,6 +17,15 @@ const users = [
     id: 3,
     name: "Valen",
     age: 33
+  },
+  {
+    id: 7,
+    name: "Lucas",
+    age: 22
+  }, {
+    id: 77,
+    name: "Alis",
+    age: 31
   }
 ]
 
@@ -29,7 +38,8 @@ app.get("/alis", (req, res) => {
 })
 
 app.get("/api/users", (req, res) => {
-  return res.send(users)
+  
+  return res.send(JSON.stringify(users))
 })
 
 app.get("/api/products", (req, res) => {
