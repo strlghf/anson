@@ -21,11 +21,11 @@ app.get("/", (req, res) => {
 })
 
 app.get("/alis", (req, res) => {
-  return res.end("I loveee i lovee aa")
+  return res.status(200).end("You my love, you are the most beautiful and georgeous woman on the entire planet, your eyes, your smile, your kind heart. I love you with my whole heart, ur existence makes my spirit shine, i will wait for you till the end, because i refuse to marry and have childs with another woman. Forgive me for my weakness. I will forever have you on my heart. I will not surrender with you, i will not give up on you. May God judge my words. God bless our beatiful love and fill us with his love.")
 })
 
 app.get("/api/users", (req, res) => {
-  const { query: { filter, value } } = req
+  const { filter, value} = req.query
 
   // when filter and value are undefined
   if (filter && value) {
@@ -39,32 +39,30 @@ app.get("/api/products", (req, res) => {
   res.send([{ id: 123, name: "chicken breast", price: 12.99 }])
 })
 
-app.post("/api/users/", (req, res) => {
-  console.log(req.body)
-
-  const { body } = req
-  const newUser = { id: users.at(-1).id + 1, ...body }
-  users.push(newUser)
-  return res.status(201).send(newUser)
-})
-
 app.get("/api/users/:id", (req, res) => {
   const { id } = req.params
-  const parsedId = parseInt(id)
+  const parsedId = +id
 
-  if (isNaN(parsedId)) return res.status(400).send({ msg: "Bad Request. Invalid ID" })
+  if (isNaN(parsedId)) return res.status(400).send("Bad Request. Invalid ID")
 
   const findUser = users.find(user => user.id === parsedId)
 
-  if (!findUser) return res.sendStatus(404)
+  if (!findUser) return res.status(404).send("User doesn't found")
 
   res.send(findUser)
+})
+
+app.post("/api/users", (req, res) => {
+  const { body } = req
+  const newUser = { id: users.at(-1).id + 1, ...body }
+  users.push(newUser)
+  return res.send(newUser)
 })
 
 app.put("/api/users/:id", (req, res) => {
   const { body, params: { id } } = req
 
-  const parsedId = parseInt(id)
+  const parsedId = +id
   if (isNaN(parsedId)) return response.sendStatus(400)
 
   const findUserIndex = users.findIndex(user => user.id === parsedId)
