@@ -2,6 +2,8 @@ import express from "express";
 
 const app = express();
 
+app.use(express.json())
+
 const PORT = process.env.PORT || 5173;
 
 const users = [
@@ -37,6 +39,15 @@ app.get("/api/products", (req, res) => {
   res.send([{ id: 123, name: "chicken breast", price: 12.99 }])
 })
 
+app.post("/api/users/", (req, res) => {
+  console.log(req.body)
+
+  const { body } = req
+  const newUser = { id: users.at(-1).id + 1, ...body }
+  users.push(newUser)
+  return res.status(201).send(newUser)
+})
+
 app.get("/api/users/:id", (req, res) => {
   const { id } = req.params
   const parsedId = parseInt(id)
@@ -48,6 +59,21 @@ app.get("/api/users/:id", (req, res) => {
   if (!findUser) return res.sendStatus(404)
 
   res.send(findUser)
+})
+
+app.put("/api/users/:id", (req, res) => {
+  const { body, params: { id } } = req
+
+  const parsedId = parseInt(id)
+  if (isNaN(parsedId)) return response.sendStatus(400)
+
+  const findUserIndex = users.findIndex(user => user.id === parsedId)
+
+  if (findUserIndex === -1) return res.sendStatus(404)
+
+  users[findUserIndex] = { id: parsedId, ...body }
+
+  return res.sendStatus(200)
 })
 
 app.listen(PORT, () => {
