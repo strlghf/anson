@@ -32,11 +32,11 @@ app.get("/api/users", (req, res) => {
     return res.send(users.filter(user => user[filter].includes(value)))
   }
 
-  res.send(users)
+  res.status(200).send(users)
 })
 
 app.get("/api/products", (req, res) => {
-  res.send([{ id: 123, name: "chicken breast", price: 12.99 }])
+  res.status(200).send([{ id: 123, name: "chicken breast", price: 12.99 }])
 })
 
 app.get("/api/users/:id", (req, res) => {
@@ -49,14 +49,14 @@ app.get("/api/users/:id", (req, res) => {
 
   if (!findUser) return res.status(404).send("User doesn't found")
 
-  res.send(findUser)
+  res.status(200).send(findUser)
 })
 
 app.post("/api/users", (req, res) => {
   const { body } = req
   const newUser = { id: users.at(-1).id + 1, ...body }
   users.push(newUser)
-  res.send(newUser)
+  res.status(201).send(newUser)
 })
 
 app.put("/api/users/:id", (req, res) => {
