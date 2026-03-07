@@ -4,6 +4,19 @@ const app = express();
 
 app.use(express.json())
 
+function resolveIndexByUserId (req, res, next) {
+  const { params: { id } } = req
+
+  const parsedId = +id
+  if (isNaN(parsedId)) return res.sendStatus(400)
+
+  const findUserIndex = users.findIndex(user => user.id === parsedId)
+  if (findUserIndex === -1) return res.sendStatus(404)
+
+  req.findUserIndex = findUserIndex
+  next()
+}
+
 const PORT = process.env.PORT || 5173;
 
 const users = [
@@ -39,13 +52,10 @@ app.get("/api/products", (req, res) => {
   res.status(200).send([{ id: 123, name: "chicken breast", price: 12.99 }])
 })
 
-app.get("/api/users/:id", (req, res) => {
-  const { id } = req.params
-  const parsedId = +id
+app.get("/api/users/:id", resolveIndexByUserId, (req, res) => {
+  const { findUserIndex } = req
 
-  if (isNaN(parsedId)) return res.status(400).send("Bad Request. Invalid ID")
-
-  const findUser = users.find(user => user.id === parsedId)
+  const findUser = users[findUserIndex]
 
   if (!findUser) return res.status(404).send("User doesn't found")
 
@@ -59,40 +69,25 @@ app.post("/api/users", (req, res) => {
   res.status(201).send(newUser)
 })
 
-app.put("/api/users/:id", (req, res) => {
-  const { body, params: { id } } = req
+app.put("/api/users/:id", resolveIndexByUserId, (req, res) => {
+  const { body, findUserIndex } = req
 
-  const parsedId = +id
-  if (isNaN(parsedId)) return response.sendStatus(400)
-
-  const findUserIndex = users.findIndex(user => user.id === parsedId)
-  if (findUserIndex === -1) return res.sendStatus(404)
-  users[findUserIndex] = { id: parsedId, ...body }
+  users[findUserIndex] = { id: users[findUserIndex].id, ...body }
 
   res.sendStatus(200)
 })
 
-app.patch("/api/users/:id", (req, res) => {
-  const { body, params: { id } } = req
-  const parsedId = +id
-  
-  if (isNaN(parsedId)) return res.sendStatus(400)
+app.patch("/api/users/:id", resolveIndexByUserId, (req, res) => {
+  const { body, findUserIndex } = req
 
-  const findUserIndex = users.findIndex(user => user.id === parsedId)
-  if (findUserIndex === -1) return res.sendStatus(404)
   users[findUserIndex] = { ...users[findUserIndex], ...body }
 
   res.sendStatus(200)
 })
 
-app.delete("/api/users/:id", (req, res) => {
-  const { id  } = req.params
-  const parsedId = +id
+app.delete("/api/users/:id", resolveIndexByUserId, (req, res) => {
+  const { findUserIndex } = req
 
-  if (isNaN(parsedId)) return res.sendStatus(400)
-    
-  const findUserIndex = users.findIndex(user => user.id === parsedId)
-  if (findUserIndex === -1) return res.sendStatus(404)
   users.splice(findUserIndex, 1)
 
   res.status(204).send("Resource removed")
