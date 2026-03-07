@@ -74,6 +74,21 @@ app.put("/api/users/:id", (req, res) => {
   return res.sendStatus(200)
 })
 
+app.patch("/api/users/:id", (req, res) => {
+  const { body, params: { id } } = req
+
+  const parsedId = +id
+  if (isNaN(parsedId)) return response.sendStatus(400)
+
+  const findUserIndex = users.findIndex(user => user.id === parsedId)
+
+  if (findUserIndex === -1) return res.sendStatus(404)
+
+  users[findUserIndex] = { ...users[findUserIndex], ...body }
+
+  return res.sendStatus(200)
+})
+
 app.listen(PORT, () => {
   console.log(`Running on Port ${PORT}`)
 })
