@@ -17,11 +17,11 @@ const users = [
 ]
 
 app.get("/", (req, res) => {
-  return res.status(200).send("Hello")
+  res.status(200).send("Hello")
 })
 
 app.get("/alis", (req, res) => {
-  return res.status(200).end("You my love, you are the most beautiful and georgeous woman on the entire planet, your eyes, your smile, your kind heart. I love you with my whole heart, ur existence makes my spirit shine, i will wait for you till the end, because i refuse to marry and have childs with another woman. Forgive me for my weakness. I will forever have you on my heart. I will not surrender with you, i will not give up on you. May God judge my words. God bless our beatiful love and fill us with his love.")
+  res.status(200).send("You my love, you are the most beautiful and georgeous woman on the entire planet, your eyes, your smile, your kind heart. I love you with my whole heart, ur existence makes my spirit shine, i will wait for you till the end, because i refuse to marry and have childs with another woman. Forgive me for my weakness. I will forever have you on my heart. I will not surrender with you, i will not give up on you. May God judge my words. God bless our beatiful love and fill us with his love.")
 })
 
 app.get("/api/users", (req, res) => {
@@ -32,7 +32,7 @@ app.get("/api/users", (req, res) => {
     return res.send(users.filter(user => user[filter].includes(value)))
   }
 
-  return res.send({ users })
+  res.send(users)
 })
 
 app.get("/api/products", (req, res) => {
@@ -56,7 +56,7 @@ app.post("/api/users", (req, res) => {
   const { body } = req
   const newUser = { id: users.at(-1).id + 1, ...body }
   users.push(newUser)
-  return res.send(newUser)
+  res.send(newUser)
 })
 
 app.put("/api/users/:id", (req, res) => {
@@ -71,7 +71,7 @@ app.put("/api/users/:id", (req, res) => {
 
   users[findUserIndex] = { id: parsedId, ...body }
 
-  return res.sendStatus(200)
+  res.sendStatus(200)
 })
 
 app.patch("/api/users/:id", (req, res) => {
@@ -84,7 +84,7 @@ app.patch("/api/users/:id", (req, res) => {
   if (findUserIndex === -1) return res.sendStatus(404)
   users[findUserIndex] = { ...users[findUserIndex], ...body }
 
-  return res.sendStatus(200)
+  res.sendStatus(200)
 })
 
 app.delete("/api/users/:id", (req, res) => {
@@ -97,7 +97,11 @@ app.delete("/api/users/:id", (req, res) => {
   if (findUserIndex === -1) return res.sendStatus(404)
   users.splice(findUserIndex, 1)
 
-  return res.status(204).send("Resource removed")
+  res.status(204).send("Resource removed")
+})
+
+app.use((req, res) => {
+  res.status(404).send("Resource has been deleted or not found")
 })
 
 app.listen(PORT, () => {
