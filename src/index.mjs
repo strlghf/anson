@@ -4,6 +4,13 @@ const app = express();
 
 app.use(express.json())
 
+function loggingMiddleware (req, res, next) {
+  console.log(`${req.method} - ${req.url}`)
+  next()
+}
+
+app.use(loggingMiddleware)
+
 function resolveIndexByUserId (req, res, next) {
   const { params: { id } } = req
 
