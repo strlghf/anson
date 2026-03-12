@@ -1,4 +1,5 @@
 import express from "express";
+import { query, validationResult, body } from "express-validator";
 
 const app = express();
 
@@ -41,13 +42,15 @@ app.get("/", (req, res) => {
 })
 
 app.get("/alis", (req, res) => {
-  res.status(200).send("You my love, you are the most beautiful and georgeous woman on the entire planet, your eyes, your smile, your kind heart. I love you with my whole heart, ur existence makes my spirit shine, i will wait for you till the end, because i refuse to marry and have childs with another woman. Forgive me for my weakness. I will forever have you on my heart. I will not surrender with you, i will not give up on you. May God judge my words. God bless our beatiful love and fill us with his love.")
+  res.status(200).send("You my love, you are the most beautiful and georgeous woman on the entire planet, your eyes, your smile, your kind heart. I love you with my whole heart, ur existence makes my spirit shine, i will wait for you till the end, because i refuse to marry and have childs with another woman. Forgive me for my weakness. I will forever have you on my heart. I will not surrender with you, i will not give up on you. May God judge my words. God bless our beautiful love and fill us with His love.")
 })
 
-app.get("/api/users", (req, res) => {
+app.get("/api/users", query("filter").isString().notEmpty().withMessage("Must not be empty").isLength({ min: 3, max: 10 }).withMessage("Must be at least 3-10 characters"), (req, res) => {
+  const result = validationResult(req)
+  console.log(result)
+
   const { filter, value} = req.query
 
-  // when filter and value are undefined
   if (filter && value) {
     return res.send(users.filter(user => user[filter].includes(value)))
   }
@@ -69,7 +72,15 @@ app.get("/api/users/:id", resolveIndexByUserId, (req, res) => {
   res.status(200).send(findUser)
 })
 
-app.post("/api/users", (req, res) => {
+app.post("/api/users", [
+  body("name").notEmpty().withMessage("name cannot be empty").isLength({ min: 6, max: 32 }).withMessage("Username must be at least 5 characters with a max of 32 characters").isString().withMessage("Username must be a string!"),
+  body("displayName").notEmpty()
+], (req, res) => {
+  const result = validationResult(req)
+  console.log(result);
+
+  if (!result.isEmpty()) return res.status(400).send({ errors: result.array() })
+
   const { body } = req
   const newUser = { id: users.at(-1).id + 1, ...body }
   users.push(newUser)
