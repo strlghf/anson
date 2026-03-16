@@ -4,6 +4,8 @@ import routes from "./routes/index.mjs"
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import { users } from "./utils/constants.mjs";
+import passport from "passport";
+import "./strategies/local-strategy.mjs"
 
 const app = express();
 
@@ -17,6 +19,8 @@ app.use(session({
     maxAge: 60000 * 60,
   }
 }));
+app.use(passport.initialize())
+app.use(passport.session())
 app.use(routes);
 app.use(loggingMiddleware);
 
@@ -47,14 +51,14 @@ app.get("/alis", (req, res) => {
   res.status(200).send("You my love, you are the most beautiful and georgeous woman on the entire planet, your eyes, your smile, your kind heart. I love you with my whole heart, ur existence makes my spirit shine, i will wait for you till the end, because i refuse to marry and have childs with another woman. Forgive me for my weakness. I will forever have you on my heart. I will not surrender with you, i will not give up on you. May God judge my words. God bless our beautiful love and fill us with His love.");
 })
 
-app.post("/api/auth", (req, res) => {
-  const { name, password } = req.body
-  const findUser = users.find(user => user.name === name)
-  if (!findUser || findUser.password !== password) return res.status(401).send("Failed authentication")
+// app.post("/api/auth", (req, res) => {
+//   const { name, password } = req.body
+//   const findUser = users.find(user => user.name === name)
+//   if (!findUser || findUser.password !== password) return res.status(401).send("Failed authentication")
   
-  req.session.user = findUser;
-  return res.status(200).send(findUser)
-})
+//   req.session.user = findUser;
+//   return res.status(200).send(findUser)
+// })
 
 app.post("/api/cart", (req, res) => {
   if (!req.session.user) return res.sendStatus(401);
@@ -69,6 +73,10 @@ app.post("/api/cart", (req, res) => {
   }
 
   return res.status(201).send(item)
+})
+
+app.post("/api/auth", passport.authenticate("local"), (req, res) => {
+
 })
 
 app.use((req, res) => {
