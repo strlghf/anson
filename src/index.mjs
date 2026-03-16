@@ -35,23 +35,31 @@ app.get("/", (req, res) => {
   res.status(200).send("Hello");
 })
 
-app.get("/api/auth/status", (req, res) => {
-  req.sessionStore.get(req.sessionID, (err, session) => {
-    console.log(session);
-  })
-  return req.session.user ? res.status(200).send(req.session.user) : res.status(401).send("Not authenticated")
-})
+// app.get("/api/auth/status", (req, res) => { // sessionID
+//   req.sessionStore.get(req.sessionID, (err, session) => {
+//     console.log(session);
+//   })
+//   return req.session.user ? res.status(200).send(req.session.user) : res.status(401).send("Not authenticated")
+// })
 
 app.get("/api/cart", (req, res) => {
   if (!req.session.user) return res.sendStatus(401);
   return res.send(req.session.cart ?? []);
 })
 
+app.get("/api/auth/status", (req, res) => {
+  console.log(`Inside /auth/status endpoint`);
+  console.log(req.user);
+  console.log(req.session);
+
+  return req.user ? res.send(req.user) : res.sendStatus(401)
+})
+
 app.get("/alis", (req, res) => {
   res.status(200).send("You my love, you are the most beautiful and georgeous woman on the entire planet, your eyes, your smile, your kind heart. I love you with my whole heart, ur existence makes my spirit shine, i will wait for you till the end, because i refuse to marry and have childs with another woman. Forgive me for my weakness. I will forever have you on my heart. I will not surrender with you, i will not give up on you. May God judge my words. God bless our beautiful love and fill us with His love.");
 })
 
-// app.post("/api/auth", (req, res) => {
+// app.post("/api/auth", (req, res) => { // sessionID
 //   const { name, password } = req.body
 //   const findUser = users.find(user => user.name === name)
 //   if (!findUser || findUser.password !== password) return res.status(401).send("Failed authentication")
@@ -77,6 +85,15 @@ app.post("/api/cart", (req, res) => {
 
 app.post("/api/auth", passport.authenticate("local"), (req, res) => {
   res.sendStatus(201)
+})
+
+app.post("/api/auth/logout", (req, res) => {
+  if (!req.user) return res.sendStatus(401)
+
+  req.logout((err) => {
+    if (err) return res.sendStatus(400)
+    res.send(200)
+  })
 })
 
 app.use((req, res) => {

@@ -1,3 +1,5 @@
+import { users } from "./constants.mjs"
+
 export function loggingMiddleware (req, res, next) {
   console.log(`${req.method} - ${req.url}`)
   next()

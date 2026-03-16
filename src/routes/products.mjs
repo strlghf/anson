@@ -6,7 +6,7 @@ router.get("/api/products", (req, res) => {
   console.log(req.headers.cookie)
   console.log(req.cookies)
   console.log(req.signedCookies.hello)
-  if (req.cookies.hello && req.cookies.hello === "world") {
+  if (req.cookies.hello === "world") {
     return res.send([{ id: 123, name: "chicken breast", price: 12.99 }])
   }
 
