@@ -32,7 +32,10 @@ app.get("/", (req, res) => {
 })
 
 app.get("/api/auth/status", (req, res) => {
-  return res.session.user ? res.status(200).send(req.session.user) : res.status(401).send("Not authenticated")
+  req.sessionStore.get(req.sessionID, (err, session) => {
+    console.log(session);
+  })
+  return req.session.user ? res.status(200).send(req.session.user) : res.status(401).send("Not authenticated")
 })
 
 app.get("/alis", (req, res) => {
@@ -46,6 +49,21 @@ app.post("/api/auth", (req, res) => {
   
   req.session.user = findUser;
   return res.status(200).send(findUser)
+})
+
+app.post("/api/cart", (req, res) => {
+  if (!req.session.user) return res.sendStatus(401);
+  const { body: item } = req;
+
+  const { cart } = req.session;
+
+  if (cart) {
+    cart.push(item);
+  } else {
+    req.session.cart = [item];
+  }
+
+  return res.status(201).send(item)
 })
 
 app.use((req, res) => {
