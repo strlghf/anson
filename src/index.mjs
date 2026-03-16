@@ -8,13 +8,24 @@ const app = express();
 
 app.use(express.json())
 app.use(cookieParser("helloworld"));
-app.use(session());
+app.use(session({
+  secret: "anson the dev",
+  saveUninitialized: false,
+  resave: false,
+  cookie: {
+    maxAge: 60000 * 60,
+  }
+}));
 app.use(routes);
 app.use(loggingMiddleware);
 
 const PORT = process.env.PORT || 5173;
 
 app.get("/", (req, res) => {
+  console.log(req.session);
+  console.log(req.sessionID);
+  req.session.visited = true;
+  
   res.cookie("hello", "world", { maxAge: 60000 })
   res.status(200).send("Hello");
 })
