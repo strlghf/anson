@@ -1,5 +1,7 @@
 import { Router } from "express";
-import { query, validationResult } from "express-validator";
+import { checkSchema, matchedData, query, validationResult } from "express-validator";
+import { users } from "../utils/constants.mjs";
+import { userValidationSchema } from "../utils/validationSchemas.mjs";
 
 export const router = Router();
 
@@ -14,4 +16,18 @@ router.get("/api/users", query("filter").isString().notEmpty().withMessage("Must
   }
 
   res.status(200).send(users)
+})
+
+router.post("/api/users", checkSchema(userValidationSchema), (req, res) => {
+  const result = validationResult(req)
+  console.log(result);
+
+  if (!result.isEmpty()) return res.status(400).send({ errors: result.array() })
+
+  // validate req.body
+  const data = matchedData(req)
+
+  const newUser = { id: users.at(-1).id + 1, ...data }
+  users.push(newUser)
+  res.status(201).send(newUser)
 })
