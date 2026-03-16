@@ -76,7 +76,7 @@ app.post("/api/cart", (req, res) => {
 })
 
 app.post("/api/auth", passport.authenticate("local"), (req, res) => {
-
+  res.sendStatus(201)
 })
 
 app.use((req, res) => {
