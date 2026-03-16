@@ -1,6 +1,6 @@
 import express from "express";
 import { validationResult, matchedData, checkSchema } from "express-validator";
-import { userValidationSchema } from "./utils/validationSchemas.mjs";
+import { loggingMiddleware } from "./middlewares/middlewares.mjs";
 import { router } from "./routes/users.mjs";
 import { users } from "./utils/constants.mjs";
 
@@ -9,25 +9,7 @@ const app = express();
 app.use(express.json())
 app.use(router)
 
-function loggingMiddleware (req, res, next) {
-  console.log(`${req.method} - ${req.url}`)
-  next()
-}
-
 app.use(loggingMiddleware)
-
-function resolveIndexByUserId (req, res, next) {
-  const { params: { id } } = req
-
-  const parsedId = +id
-  if (isNaN(parsedId)) return res.sendStatus(400)
-
-  const findUserIndex = users.findIndex(user => user.id === parsedId)
-  if (findUserIndex === -1) return res.sendStatus(404)
-
-  req.findUserIndex = findUserIndex
-  next()
-}
 
 const PORT = process.env.PORT || 5173;
 
@@ -41,30 +23,6 @@ app.get("/alis", (req, res) => {
 
 app.get("/api/products", (req, res) => {
   res.status(200).send([{ id: 123, name: "chicken breast", price: 12.99 }])
-})
-
-app.get("/api/users/:id", resolveIndexByUserId, (req, res) => {
-  const { findUserIndex } = req
-
-  const findUser = users[findUserIndex]
-
-  if (!findUser) return res.status(404).send("User doesn't found")
-
-  res.status(200).send(findUser)
-})
-
-app.post("/api/users", checkSchema(userValidationSchema), (req, res) => {
-  const result = validationResult(req)
-  console.log(result);
-
-  if (!result.isEmpty()) return res.status(400).send({ errors: result.array() })
-
-  // validate req.body
-  const data = matchedData(req)
-
-  const newUser = { id: users.at(-1).id + 1, ...data }
-  users.push(newUser)
-  res.status(201).send(newUser)
 })
 
 app.put("/api/users/:id", resolveIndexByUserId, (req, res) => {

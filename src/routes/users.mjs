@@ -2,6 +2,7 @@ import { Router } from "express";
 import { checkSchema, matchedData, query, validationResult } from "express-validator";
 import { users } from "../utils/constants.mjs";
 import { userValidationSchema } from "../utils/validationSchemas.mjs";
+import { resolveIndexByUserId } from "../middlewares/middlewares.mjs";
 
 export const router = Router();
 
@@ -16,6 +17,16 @@ router.get("/api/users", query("filter").isString().notEmpty().withMessage("Must
   }
 
   res.status(200).send(users)
+})
+
+router.get("/api/users/:id", resolveIndexByUserId, (req, res) => {
+  const { findUserIndex } = req
+
+  const findUser = users[findUserIndex]
+
+  if (!findUser) return res.status(404).send("User doesn't found")
+
+  res.status(200).send(findUser)
 })
 
 router.post("/api/users", checkSchema(userValidationSchema), (req, res) => {
