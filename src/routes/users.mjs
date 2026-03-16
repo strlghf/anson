@@ -50,3 +50,19 @@ router.put("/api/users/:id", resolveIndexByUserId, (req, res) => {
 
   res.sendStatus(200)
 })
+
+router.patch("/api/users/:id", resolveIndexByUserId, (req, res) => {
+  const { body, findUserIndex } = req
+
+  users[findUserIndex] = { ...users[findUserIndex], ...body }
+
+  res.sendStatus(200)
+})
+
+app.delete("/api/users/:id", resolveIndexByUserId, (req, res) => {
+  const { findUserIndex } = req
+
+  users.splice(findUserIndex, 1)
+
+  res.status(204).send("Resource removed")
+})

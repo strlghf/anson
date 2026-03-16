@@ -1,8 +1,6 @@
 import express from "express";
-import { validationResult, matchedData, checkSchema } from "express-validator";
 import { loggingMiddleware } from "./middlewares/middlewares.mjs";
 import { router } from "./routes/users.mjs";
-import { users } from "./utils/constants.mjs";
 
 const app = express();
 
@@ -23,22 +21,6 @@ app.get("/alis", (req, res) => {
 
 app.get("/api/products", (req, res) => {
   res.status(200).send([{ id: 123, name: "chicken breast", price: 12.99 }])
-})
-
-app.patch("/api/users/:id", resolveIndexByUserId, (req, res) => {
-  const { body, findUserIndex } = req
-
-  users[findUserIndex] = { ...users[findUserIndex], ...body }
-
-  res.sendStatus(200)
-})
-
-app.delete("/api/users/:id", resolveIndexByUserId, (req, res) => {
-  const { findUserIndex } = req
-
-  users.splice(findUserIndex, 1)
-
-  res.status(204).send("Resource removed")
 })
 
 app.use((req, res) => {
