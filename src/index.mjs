@@ -38,6 +38,11 @@ app.get("/api/auth/status", (req, res) => {
   return req.session.user ? res.status(200).send(req.session.user) : res.status(401).send("Not authenticated")
 })
 
+app.get("/api/cart", (req, res) => {
+  if (!req.session.user) return res.sendStatus(401);
+  return res.send(req.session.cart ?? []);
+})
+
 app.get("/alis", (req, res) => {
   res.status(200).send("You my love, you are the most beautiful and georgeous woman on the entire planet, your eyes, your smile, your kind heart. I love you with my whole heart, ur existence makes my spirit shine, i will wait for you till the end, because i refuse to marry and have childs with another woman. Forgive me for my weakness. I will forever have you on my heart. I will not surrender with you, i will not give up on you. May God judge my words. God bless our beautiful love and fill us with His love.");
 })
