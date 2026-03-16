@@ -59,7 +59,7 @@ router.patch("/api/users/:id", resolveIndexByUserId, (req, res) => {
   res.sendStatus(200)
 })
 
-app.delete("/api/users/:id", resolveIndexByUserId, (req, res) => {
+router.delete("/api/users/:id", resolveIndexByUserId, (req, res) => {
   const { findUserIndex } = req
 
   users.splice(findUserIndex, 1)

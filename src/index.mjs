@@ -11,6 +11,7 @@ app.use(loggingMiddleware)
 const PORT = process.env.PORT || 5173;
 
 app.get("/", (req, res) => {
+  res.cookie("hello", "world", { maxAge: 6000 })
   res.status(200).send("Hello")
 })
 
