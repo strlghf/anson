@@ -10,7 +10,7 @@ router.get("/api/users", query("filter").isString().notEmpty().withMessage("Must
   const result = validationResult(req)
   console.log(result)
 
-  const { filter, value} = req.query
+  const { filter, value } = req.query
 
   if (filter && value) {
     return res.send(users.filter(user => user[filter].includes(value)))
