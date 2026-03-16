@@ -1,5 +1,5 @@
 import express from "express";
-import { loggingMiddleware } from "./middlewares/middlewares.mjs";
+import { loggingMiddleware } from "./utils/middlewares.mjs";
 import { router } from "./routes/users.mjs";
 
 const app = express();

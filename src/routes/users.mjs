@@ -2,7 +2,7 @@ import { Router } from "express";
 import { checkSchema, matchedData, query, validationResult } from "express-validator";
 import { users } from "../utils/constants.mjs";
 import { userValidationSchema } from "../utils/validationSchemas.mjs";
-import { resolveIndexByUserId } from "../middlewares/middlewares.mjs";
+import { resolveIndexByUserId } from "../utils/middlewares.mjs";
 
 export const router = Router();
 
