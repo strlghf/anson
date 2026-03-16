@@ -1,10 +1,13 @@
 import express from "express";
-import { query, validationResult, body, matchedData, checkSchema } from "express-validator";
+import { validationResult, matchedData, checkSchema } from "express-validator";
 import { userValidationSchema } from "./utils/validationSchemas.mjs";
+import { router } from "./routes/users.mjs";
+import { users } from "./utils/constants.mjs";
 
 const app = express();
 
 app.use(express.json())
+app.use(router)
 
 function loggingMiddleware (req, res, next) {
   console.log(`${req.method} - ${req.url}`)
@@ -28,35 +31,12 @@ function resolveIndexByUserId (req, res, next) {
 
 const PORT = process.env.PORT || 5173;
 
-const users = [
-  { id: 1, name: "James", age: "33" }, 
-  { id: 2, name: "Agus", age: 20 }, 
-  { id: 3, name: "Valen", age: 33 },
-  { id: 7, name: "Lucas", age: 22 }, 
-  { id: 77, name: "Alis", age: 31, husband: "Lucas", verse: "Mateo 6:33", favoriteFood: "Chocolate", cat: "Pelu" },
-  { id: 53, name: "André", age: 2 },
-  { id: 43, name: "Salomon", age: 43 }
-]
-
 app.get("/", (req, res) => {
   res.status(200).send("Hello")
 })
 
 app.get("/alis", (req, res) => {
   res.status(200).send("You my love, you are the most beautiful and georgeous woman on the entire planet, your eyes, your smile, your kind heart. I love you with my whole heart, ur existence makes my spirit shine, i will wait for you till the end, because i refuse to marry and have childs with another woman. Forgive me for my weakness. I will forever have you on my heart. I will not surrender with you, i will not give up on you. May God judge my words. God bless our beautiful love and fill us with His love.")
-})
-
-app.get("/api/users", query("filter").isString().notEmpty().withMessage("Must not be empty").isLength({ min: 3, max: 10 }).withMessage("Must be at least 3-10 characters"), (req, res) => {
-  const result = validationResult(req)
-  console.log(result)
-
-  const { filter, value} = req.query
-
-  if (filter && value) {
-    return res.send(users.filter(user => user[filter].includes(value)))
-  }
-
-  res.status(200).send(users)
 })
 
 app.get("/api/products", (req, res) => {
