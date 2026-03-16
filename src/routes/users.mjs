@@ -4,7 +4,7 @@ import { users } from "../utils/constants.mjs";
 import { userValidationSchema } from "../utils/validationSchemas.mjs";
 import { resolveIndexByUserId } from "../utils/middlewares.mjs";
 
-export const router = Router();
+const router = Router();
 
 router.get("/api/users", query("filter").isString().notEmpty().withMessage("Must not be empty").isLength({ min: 3, max: 10 }).withMessage("Must be at least 3-10 characters"), (req, res) => {
   const result = validationResult(req)
@@ -66,3 +66,5 @@ app.delete("/api/users/:id", resolveIndexByUserId, (req, res) => {
 
   res.status(204).send("Resource removed")
 })
+
+export default router
