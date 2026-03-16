@@ -25,14 +25,6 @@ app.get("/api/products", (req, res) => {
   res.status(200).send([{ id: 123, name: "chicken breast", price: 12.99 }])
 })
 
-app.put("/api/users/:id", resolveIndexByUserId, (req, res) => {
-  const { body, findUserIndex } = req
-
-  users[findUserIndex] = { id: users[findUserIndex].id, ...body }
-
-  res.sendStatus(200)
-})
-
 app.patch("/api/users/:id", resolveIndexByUserId, (req, res) => {
   const { body, findUserIndex } = req
 

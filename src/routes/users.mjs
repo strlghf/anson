@@ -42,3 +42,11 @@ router.post("/api/users", checkSchema(userValidationSchema), (req, res) => {
   users.push(newUser)
   res.status(201).send(newUser)
 })
+
+router.put("/api/users/:id", resolveIndexByUserId, (req, res) => {
+  const { body, findUserIndex } = req
+
+  users[findUserIndex] = { id: users[findUserIndex].id, ...body }
+
+  res.sendStatus(200)
+})
