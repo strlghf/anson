@@ -21,15 +21,23 @@ app.get("/", (req, res) => {
 })
 
 app.get("/api/users", (req, res) => {
-  res.send()
+  res.send(users);
 })
 
 app.get("/api/products", (req, res) => {
-  res.send()
+  res.send(products);
 })
 
 app.get("/api/users/:id", (req, res) => {
-  const { id } = req.params;
+  const { id } = req.params
+
+  if (isNaN(+id)) return res.status(400).send({ msg: "Bad Request" })
+
+  const findUser = users.find(user => user.id === +id);
+  
+  if (!findUser) return res.sendStatus(404);
+
+  return res.send(findUser)
 })
 
 app.listen(PORT, () => {
