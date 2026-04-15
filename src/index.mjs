@@ -7,7 +7,11 @@ const PORT = process.env.PORT || 3000;
 const users = [
   { id: 1, username: "pheralb", displayName: "Pheralb" },
   { id: 2, username: "midudev", displayName: "MiduDev" },
-  { id: 3, username: "anson", displayName: "Anson" }
+  { id: 3, username: "anson", displayName: "Anson" },
+  { id: 4, username: "abraham", displayName: "Abraham" },
+  { id: 5, username: "isaac", displayName: "Isaac" },
+  { id: 6, username: "jacob", displayName: "Jacob" },
+  { id: 7, username: "moses", displayName: "Moses" },
 ]
 
 const products = [
@@ -21,7 +25,13 @@ app.get("/", (req, res) => {
 })
 
 app.get("/api/users", (req, res) => {
-  res.send(users);
+  const { filter, value } = req.query;
+
+  if (filter && value) return res.send(
+    users.filter(user => user[filter].includes(value))
+  )
+
+  return res.send(users);
 })
 
 app.get("/api/products", (req, res) => {
