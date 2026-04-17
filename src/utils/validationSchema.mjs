@@ -15,3 +15,21 @@ export const createUserValidation = {
     }
   }
 }
+
+export const createProductValidation = {
+  name: {
+    isLength: {
+      options: {
+        min: 3,
+        max: 32
+      },
+      errorMessage: "Product must be at least 5 characters with a max of 32 characters"
+    },
+    notEmpty: {
+      errorMessage: "Product cannot be empty"
+    },
+    isString: {
+      errorMessage: "Product must be a string"
+    }
+  }
+}

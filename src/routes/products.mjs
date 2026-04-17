@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { products } from "../utils/constants.mjs";
 import { resolveProductById } from "../utils/middlewares.mjs";
+import { checkSchema } from "express-validator";
+import { createProductValidation } from "../utils/validationSchema.mjs";
 
 const router = Router();
 
@@ -22,5 +24,8 @@ router.get("/api/products/:id", resolveProductById, (req, res) => {
   return res.send(findProduct);
 })
 
+router.post("/api/products", checkSchema(createProductValidation), (req, res) => {
+
+})
 
 export default router;

@@ -9,7 +9,7 @@ export const users = [
 ]
 
 export const products = [
-  { id: "123", name: "chicken breast", price: "12.99" },
-  { id: "132", name: "react course", price: "72.99" },
-  { id: "231", name: "red mantle", price: "23.99" }
+  { id: "1", name: "chicken breast", price: "12.99" },
+  { id: "2", name: "react course", price: "72.99" },
+  { id: "3", name: "red mantle", price: "23.99" }
 ]
