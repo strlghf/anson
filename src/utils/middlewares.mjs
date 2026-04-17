@@ -1,4 +1,4 @@
-import { users } from "./constants.mjs";
+import { products, users } from "./constants.mjs";
 
 export function resolveUserById (req, res, next) {
   const { id } = req.params;
@@ -10,5 +10,18 @@ export function resolveUserById (req, res, next) {
   if (findUserIndex === -1) return res.sendStatus(404);
 
   req.findUserIndex = findUserIndex;
+  next();
+}
+
+export function resolveProductById (req, res, next) {
+  const { id } = req.params;
+
+  if (isNaN(+id)) return res.sendStatus(400);
+
+  const findUserIndex = products.findIndex(product => product.id === +id);
+
+  if (findUserIndex === -1) return res.sendStatus(404);
+
+  req.findProductIndex = findProductIndex;
   next();
 }

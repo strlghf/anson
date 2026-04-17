@@ -6,3 +6,9 @@ const router = Router();
 router.get("/api/products", (req, res) => {
   res.send(products);
 })
+
+router.get("/api/products", (req, res) => {
+  
+})
+
+export default router;
