@@ -40,7 +40,7 @@ router.post("/api/products", checkSchema(createProductValidation), (req, res) =>
 router.put("/api/products/:id", resolveProductById, (req, res) => {
   const { body, findProductIndex } = req;
 
-  products[findProductIndex] = { ...products[findProductIndex], ...body };
+  products[findProductIndex] = { id: products[findProductIndex].id, ...body };
 
   return res.sendStatus(200);
 })
