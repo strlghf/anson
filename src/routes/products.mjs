@@ -53,4 +53,12 @@ router.patch("/api/products/:id", resolveProductById, (req, res) => {
   return res.sendStatus(200);
 })
 
+router.delete("/api/products/:id", resolveProductById, (req, res) => {
+  const { findProductIndex } = req;
+
+  products.splice(findProductIndex, 1);
+
+  return res.sendStatus(204);
+})
+
 export default router;
