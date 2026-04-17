@@ -1,11 +1,11 @@
 export const users = [
-  { id: 1, username: "pheralb", displayName: "Pheralb" },
-  { id: 2, username: "midudev", displayName: "MiduDev" },
-  { id: 3, username: "anson", displayName: "Anson" },
-  { id: 4, username: "abraham", displayName: "Abraham" },
-  { id: 5, username: "isaac", displayName: "Isaac" },
-  { id: 6, username: "jacob", displayName: "Jacob" },
-  { id: 7, username: "moses", displayName: "Moses" },
+  { id: 1, username: "pheralb", displayName: "Pheralb", password: "pheralb123" },
+  { id: 2, username: "midudev", displayName: "MiduDev", password: "midu123" },
+  { id: 3, username: "anson", displayName: "Anson", password: "anson123" },
+  { id: 4, username: "abraham", displayName: "Abraham", password: "abraham123" },
+  { id: 5, username: "isaac", displayName: "Isaac", password: "isaac123" },
+  { id: 6, username: "jacob", displayName: "Jacob", password: "jacob123" },
+  { id: 7, username: "moses", displayName: "Moses", password: "moses123" },
 ]
 
 export const products = [
