@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { products } from "../utils/constants.mjs";
 import { resolveProductById } from "../utils/middlewares.mjs";
-import { checkSchema } from "express-validator";
+import { checkSchema, matchedData, validationResult } from "express-validator";
 import { createProductValidation } from "../utils/validationSchema.mjs";
 
 const router = Router();
@@ -25,7 +25,16 @@ router.get("/api/products/:id", resolveProductById, (req, res) => {
 })
 
 router.post("/api/products", checkSchema(createProductValidation), (req, res) => {
+  const result = validationResult(req);
+  if (!result.isEmpty()) return res.status(400).send({ errors: result.array() });
 
+  const data = matchedData(req);
+
+  const newProduct = { id: products[products.length - 1].id + 1, ...data }
+
+  products.push(newProduct);
+
+  res.status(201).send(newProduct);
 })
 
 export default router;
