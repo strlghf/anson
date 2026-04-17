@@ -7,6 +7,11 @@ import { resolveUserById } from "../utils/middlewares.mjs";
 const router = Router();
 
 router.get("/api/users", query("filter").isString().notEmpty().isLength({ min: 3, max: 10 }).withMessage("Must be at least 3-10 characters"), (req, res) => {
+  req.sessionStore.get(req.session.id, (err, sessionData) => {
+    if (err) {
+      throw err;
+    }
+  })
   const result = validationResult(req);
   const { filter, value } = req.query;
 
