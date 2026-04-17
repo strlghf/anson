@@ -11,7 +11,11 @@ router.get("/api/products", (req, res) => {
 
   if (filter && value) return res.send(products.filter(product => product[filter].includes(value)));
 
-  res.send(products);
+  if (req.cookies.hello && req.cookies.hello === "world") {
+    res.send(products);
+  }
+
+  return res.status(403).send({ msg: "Cookie invalid" })
 })
 
 router.get("/api/products/:id", resolveProductById, (req, res) => {
@@ -30,7 +34,7 @@ router.post("/api/products", checkSchema(createProductValidation), (req, res) =>
 
   const data = matchedData(req);
 
-  const newProduct = { id: products[products.length - 1].id + 1, ...data }
+  const newProduct = { id: +products[products.length - 1].id + 1, ...data }
 
   products.push(newProduct);
 
