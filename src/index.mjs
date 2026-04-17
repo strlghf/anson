@@ -1,5 +1,6 @@
 import express from "express";
-import { query } from "express-validator";
+import { query, validationResult, matchedData, checkSchema } from "express-validator";
+import { createUserValidation } from "./utils/validationSchema.mjs";
 
 const app = express();
 app.use(express.json());
@@ -43,7 +44,8 @@ app.get("/", (req, res) => {
   res.status(200).send({ msg: "Welcome to the real world" });
 })
 
-app.get("/api/users", (req, res) => {
+app.get("/api/users", query("filter").isString().notEmpty().isLength({ min: 3, max: 10 }).withMessage("Must be at least 3-10 characters"), (req, res) => {
+  const result = validationResult(req);
   const { filter, value } = req.query;
 
   if (filter && value) return res.send(
@@ -67,9 +69,12 @@ app.get("/api/users/:id", resolveUserById, (req, res) => {
   return res.send(findUser);
 })
 
-app.post("/api/users", (req, res) => {
-  const { body } = req;
-  const newUser = { id: users[users.length - 1].id + 1, ...body }
+app.post("/api/users", checkSchema(createUserValidation), (req, res) => {
+  const result = validationResult(req);
+  if (!result.isEmpty()) return res.status(400).send({ errors: result.array() });
+  
+  const data = matchedData(req);
+  const newUser = { id: users[users.length - 1].id + 1, ...data }
   users.push(newUser);
   return res.status(201).send(newUser);
 })
