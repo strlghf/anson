@@ -45,4 +45,12 @@ router.put("/api/products/:id", resolveProductById, (req, res) => {
   return res.sendStatus(200);
 })
 
+router.patch("/api/products/:id", resolveProductById, (req, res) => {
+  const { body, findProductIndex } = req;
+
+  products[findProductIndex] = { ...products[findProductIndex], ...body }
+
+  return res.sendStatus(200);
+})
+
 export default router;
