@@ -18,9 +18,9 @@ export function resolveProductById (req, res, next) {
 
   if (isNaN(+id)) return res.sendStatus(400);
 
-  const findUserIndex = products.findIndex(product => product.id === +id);
+  const findProductIndex = products.findIndex(product => product.id === +id);
 
-  if (findUserIndex === -1) return res.sendStatus(404);
+  if (findProductIndex === -1) return res.sendStatus(404);
 
   req.findProductIndex = findProductIndex;
   next();
