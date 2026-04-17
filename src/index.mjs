@@ -25,25 +25,6 @@ app.get("/", (req, res) => {
   res.status(200).send({ msg: "Welcome to the real world" });
 })
 
-app.get("/api/cart", (req, res) => {
-  if (!req.session.user) return res.sendStatus(401);
-  return res.send(req.session.cart ?? []);
-})
-
-app.post("/api/cart", (req, res) => {
-  if (!req.session.user) return res.sendStatus(401);
-  const { body: item } = req;
-  const { cart } = req.session;
-
-  if (cart) {
-    cart.push(item);
-  } else {
-    req.session.cart = [item];
-  }
-
-  return res.status(201).send(item);
-})
-
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`)
 });
