@@ -3,12 +3,12 @@ import routes from "./routes/index.mjs";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import passport from "passport";
-import mongoose from "mongoose";
+import mysql from "mysql2"
 
 const app = express();
 
-mongoose
-  .connect("mongodb://localhost/express_tutorial")
+mysql
+  .connect("http://localhost:3306")
   .then(() => console.log("Connected to database"))
   .catch(err => console.log(`Error: ${err}`))
 
