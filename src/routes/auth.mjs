@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { users } from "../utils/constants.mjs";
+import "../strategies/local-strategy.mjs";
 
 const router = Router();
 
@@ -12,7 +13,7 @@ router.get("/api/auth/status", (req, res) => {
 })
 
 // need to validate
-router.post("/api/auth", (req, res) => {
+router.post("/api/auth", passport.authenticate("local"), (req, res) => {
   const { username, password } = req.body;
   const findUser = users.find(user => user.username === username);
 
