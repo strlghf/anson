@@ -23,4 +23,12 @@ router.post("/api/auth", passport.authenticate("local"), (req, res) => {
   return res.status(200).send(findUser);
 })
 
+router.post("/api/auth/logout", (req, res) => {
+  if (!req.user) return res.sendStatus(401);
+  req.logout(err => {
+    if (err) return res.sendStatus(400);
+    return res.send(201);
+  })
+})
+
 export default router;
