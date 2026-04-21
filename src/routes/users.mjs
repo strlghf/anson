@@ -1,12 +1,14 @@
 import { Router } from "express";
 import { checkSchema, matchedData, query, validationResult } from "express-validator";
-import { users } from "../utils/constants.mjs";
+// import { users } from "../utils/constants.mjs";
 import { createUserValidation } from "../utils/validationSchema.mjs";
 import { resolveUserById } from "../utils/middlewares.mjs";
+import { getUsers, getUser } from "../mysql/database.mjs";
 
 const router = Router();
 
-router.get("/api/users", query("filter").isString().notEmpty().isLength({ min: 3, max: 10 }).withMessage("Must be at least 3-10 characters"), (req, res) => {
+router.get("/api/users", query("filter").isString().notEmpty().isLength({ min: 3, max: 10 }).withMessage("Must be at least 3-10 characters"), async(req, res) => {
+  const users = await getUsers();
   req.sessionStore.get(req.session.id, (err, sessionData) => {
     if (err) {
       throw err;
@@ -22,8 +24,10 @@ router.get("/api/users", query("filter").isString().notEmpty().isLength({ min: 3
   return res.send(users);
 })
 
-router.get("/api/users/:id", resolveUserById, (req, res) => {
+router.get("/api/users/:id", resolveUserById, async(req, res) => {
+  const { id } = req.params
   const { findUserIndex } = req;
+  const users = await getUser(id);
 
   const findUser = users[findUserIndex];
 
