@@ -18,7 +18,7 @@ export async function getUsers () {
 // prepared statement
 export async function getUser (id) {
   const [result] = await pool.query(`
-    SELECT * FROM users
+    SELECT id, username, displayName FROM users
     WHERE id = (?);
   `, [id]);
 
@@ -31,5 +31,5 @@ export async function createUser (id, username, displayName, password) {
     VALUES (?, ?, ?, ?);
   `, [id, username, displayName, password])
   const idT = result.insertId
-  return getGenre(idT);
+  return getUser(idT);
 }

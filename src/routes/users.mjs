@@ -3,7 +3,7 @@ import { checkSchema, matchedData, query, validationResult } from "express-valid
 // import { users } from "../utils/constants.mjs";
 import { createUserValidation } from "../utils/validationSchema.mjs";
 import { resolveUserById } from "../utils/middlewares.mjs";
-import { getUsers, getUser } from "../mysql/database.mjs";
+import { getUsers, getUser, createUser } from "../mysql/database.mjs";
 
 const router = Router();
 
@@ -36,7 +36,9 @@ router.get("/api/users/:id", resolveUserById, async(req, res) => {
   return res.send(findUser);
 })
 
-router.post("/api/users", checkSchema(createUserValidation), (req, res) => {
+router.post("/api/users", checkSchema(createUserValidation), async(req, res) => {
+  const { id, username, displayName, password } = req.body;
+  const users = await createUser(id, username, displayName, password);
   const result = validationResult(req);
   if (!result.isEmpty()) return res.status(400).send({ errors: result.array() });
   

@@ -28,6 +28,11 @@ app.get("/", (req, res) => {
   res.status(200).send({ msg: "Welcome to the real world" });
 })
 
+app.use((err, req, res, next) => {
+  console.error(err.stack)
+  res.status(500).send("Something broke");
+})
+
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`)
 });
