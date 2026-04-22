@@ -1,6 +1,6 @@
 import passport from "passport";
 import { Strategy } from "passport-local";
-import { getUsers } from "../mysql/database.js";
+import {  }
 import { users } from "../utils/constants.js";
 
 passport.serializeUser((user: any, done) => {

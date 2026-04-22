@@ -1,4 +1,4 @@
-import { getUsers } from "../mysql/database.js"
+import { getUsers } from "../db/database.js"
 
 export const users = await getUsers();
 

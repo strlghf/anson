@@ -3,7 +3,7 @@ import { checkSchema, matchedData, query, validationResult } from "express-valid
 // import { users } from "../utils/constants.mjs";
 import { createUserValidation } from "../utils/validationSchema.js";
 import { resolveUserById } from "../utils/middlewares.mjs";
-import { getUsers, getUser, createUser } from "../mysql/database.js";
+import { getUsers, getUser, createUser } from "../db/database.js";
 
 const router = Router();
 

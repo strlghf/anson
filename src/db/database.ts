@@ -1,4 +1,4 @@
-import mysql, { type Pool } from "mysql2/promise"
+import mysql, { type Pool, type ResultSetHeader } from "mysql2/promise"
 import dotenv from "dotenv";
 import { env } from "./schemas/dbSchema.js";
 dotenv.config();
@@ -10,7 +10,7 @@ export interface User {
   password: string;
 }
 
-const pool: Pool = mysql.createPool({
+export const pool: Pool = mysql.createPool({
   host: env.MYSQL_HOST!,
   user: env.MYSQL_USER!,
   password: env.MYSQL_PASSWORD!,
@@ -24,7 +24,7 @@ export async function getUsers () {
 }
 
 // prepared statement
-export async function getUser (id: string) {
+export async function getUser (id: number) {
   const [result] = await pool.query(`
     SELECT id, username, displayName FROM users
     WHERE id = (?);
@@ -34,7 +34,7 @@ export async function getUser (id: string) {
 }
 
 export async function createUser ({ username, displayName, password }: User) {
-  const [result] = await pool.query(`
+  const [result] = await pool.query<ResultSetHeader>(`
     INSERT INTO users (username, displayName, password)
     VALUES (?, ?, ?);
   `, [username, displayName, password])
