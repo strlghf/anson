@@ -1,4 +1,4 @@
-import { pool } from "./database.js";
+import { pool } from "./database.ts";
 import type { ResultSetHeader, RowDataPacket } from "mysql2";
 
 export interface User {

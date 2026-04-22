@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { checkSchema, matchedData, query, validationResult } from "express-validator";
 // import { users } from "../utils/constants.mjs";
-import { createUserValidation } from "../utils/validationSchema.js";
-import { resolveUserById } from "../utils/middlewares.mjs";
-import { getUsers, getUser, createUser } from "../db/database.js";
+import { createUserValidation } from "../utils/validationSchema.ts";
+import { resolveUserById } from "../utils/middlewares.ts";
+import { getUsers, getUser, createUser } from "../db/database.ts";
 
 const router = Router();
 

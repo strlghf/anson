@@ -1,4 +1,4 @@
-import { getUserByUsername } from "../db/users.repository.js";
+import { getUserByUsername } from "../db/users.repository.ts";
 
 interface Login {
   username: string;

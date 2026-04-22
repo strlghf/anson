@@ -1,6 +1,6 @@
 import mysql, { type Pool, type ResultSetHeader } from "mysql2/promise"
 import dotenv from "dotenv";
-import { env } from "./schemas/dbSchema.js";
+import { env } from "./schemas/dbSchema.ts";
 dotenv.config();
 
 export interface User {

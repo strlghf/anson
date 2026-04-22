@@ -1,5 +1,5 @@
 import express from "express";
-import routes from "./routes/index.js";
+import routes from "./routes/index.ts";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import passport from "passport";

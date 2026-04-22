@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { products } from "../utils/constants.mjs";
-import { resolveProductById } from "../utils/middlewares.mjs";
+import { products } from "../utils/constants.ts";
+import { resolveProductById } from "../utils/middlewares.ts";
 import { checkSchema, matchedData, validationResult } from "express-validator";
-import { createProductValidation } from "../utils/validationSchema.js";
+import { createProductValidation } from "../utils/validationSchema.ts";
 
 const router = Router();
 

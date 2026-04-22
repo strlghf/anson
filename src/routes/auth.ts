@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { users } from "../utils/constants.mjs";
-import "../strategies/local-strategy.mjs";
+import { users } from "../utils/constants.ts";
+import "../strategies/local-strategy.ts";
 import passport from "passport";
 
 const router = Router();

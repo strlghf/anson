@@ -1,6 +1,15 @@
-import { products, users } from "./constants.js";
+import { products, users } from "./constants.ts";
+import type { Request, Response, NextFunction } from "express";
 
-export function resolveUserById (req, res, next) {
+interface ReqUserIndex extends Request {
+  findUserIndex?: number;
+}
+
+interface ReqProductIndex extends Request {
+  findProductIndex?: number;
+}
+
+export function resolveUserById (req: ReqUserIndex, res: Response, next: NextFunction) {
   const { id } = req.params;
 
   if (isNaN(+id)) return res.sendStatus(400);

@@ -1,8 +1,8 @@
 import { Router } from "express";
-import usersRouter from "./users.mjs";
-import productsRouter from "./products.mjs";
-import authRouter from "./auth.mjs";
-import cartRouter from "./cart.mjs";
+import usersRouter from "./users.ts";
+import productsRouter from "./products.ts";
+import authRouter from "./auth.ts";
+import cartRouter from "./cart.ts";
 
 const router = Router();
 

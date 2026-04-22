@@ -1,6 +1,6 @@
 import passport from "passport";
 import { Strategy } from "passport-local";
-import { getUserById, getUserByUsername } from "../db/users.repository.js";
+import { getUserById, getUserByUsername } from "../db/users.repository.ts";
 
 passport.serializeUser((user: any, done) => {
   done(null, user.id);
