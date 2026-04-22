@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { checkSchema, matchedData, query, validationResult } from "express-validator";
 // import { users } from "../utils/constants.mjs";
-import { createUserValidation } from "../utils/validationSchema.mjs";
+import { createUserValidation } from "../utils/validationSchema.js";
 import { resolveUserById } from "../utils/middlewares.mjs";
-import { getUsers, getUser, createUser } from "../mysql/database.mjs";
+import { getUsers, getUser, createUser } from "../mysql/database.js";
 
 const router = Router();
 
@@ -37,15 +37,19 @@ router.get("/api/users/:id", resolveUserById, async(req, res) => {
 })
 
 router.post("/api/users", checkSchema(createUserValidation), async(req, res) => {
-  const { id, username, displayName, password } = req.body;
-  const users = await createUser(id, username, displayName, password);
+  const { username, displayName, password } = req.body;
   const result = validationResult(req);
+  
   if (!result.isEmpty()) return res.status(400).send({ errors: result.array() });
   
   const data = matchedData(req);
-  const newUser = { id: users[users.length - 1].id + 1, ...data }
-  users.push(newUser);
-  return res.status(201).send(newUser);
+  
+  try {
+    const newUser = await createUser(username, displayName, password);
+    return res.status(201).send(newUser);
+  } catch (err) {
+    return res.sendStatus(400);
+  }
 })
 
 router.put("/api/users/:id", resolveUserById, (req, res) => {
