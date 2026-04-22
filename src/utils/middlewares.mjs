@@ -1,4 +1,4 @@
-import { products, users } from "./constants.mjs";
+import { products, users } from "./constants.js";
 
 export function resolveUserById (req, res, next) {
   const { id } = req.params;

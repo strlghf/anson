@@ -1,30 +1,32 @@
 import passport from "passport";
 import { Strategy } from "passport-local";
-import { users } from "../utils/constants.mjs";
+import { getUsers } from "../mysql/database.js";
+import { users } from "../utils/constants.js";
 
-passport.serializeUser((user, done) => {
+passport.serializeUser((user: any, done) => {
   done(null, user.id);
 })
 
-passport.deserializeUser((id, done) => {
+passport.deserializeUser(async (id, done) => {
   try {
     const findUser = users.find(user => user.id === id);
-    if (!findUser) throw new Error("User not found");
+    if (!findUser) return done(null, false);
     done(null, findUser);
   } catch (err) {
-    done(err, null);
+    done(err);
   }
 })
 
 export default passport.use(
-  new Strategy((username, password, done) => {
+  new Strategy(async (username, password, done) => {
     try {
+      const users = await getUsers();
       const findUser = users.find(user => user.username === username);
       if (!findUser) throw new Error("User not found");
-      if (findUser.password !== password) throw new Error("Invalid password")
+      if (findUser.password !== password) throw new Error("Failed authentication")
       done(null, findUser);
     } catch (err) {
-      done(err, null);
+      done(err);
     }
   })
 )
