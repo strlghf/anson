@@ -1,9 +1,11 @@
-import { Router } from "express";
+import { Router, type Request, type Response } from "express";
 import { checkSchema, matchedData, query, validationResult } from "express-validator";
 // import { users } from "../utils/constants.mjs";
 import { createUserValidation } from "../utils/validationSchema.ts";
 import { resolveUserById } from "../utils/middlewares.ts";
-import { getUsers, getUser, createUser } from "../db/database.ts";
+import { getUsers, getUser } from "../db/database.ts";
+import { getUserById, createUser } from "../db/users.repository.ts";
+import { hashPassword } from "../utils/helpers.ts";
 
 const router = Router();
 
@@ -36,14 +38,14 @@ router.get("/api/users/:id", resolveUserById, async(req, res) => {
   return res.send(findUser);
 })
 
-router.post("/api/users", checkSchema(createUserValidation), async(req, res) => {
+router.post("/api/users", checkSchema(createUserValidation), async(req: Request, res: Response) => {
   const { username, displayName, password } = req.body;
   const result = validationResult(req);
   
-  if (!result.isEmpty()) return res.status(400).send({ errors: result.array() });
+  if (!result.isEmpty()) return res.status(400).send(result.array());
   
   const data = matchedData(req);
-  
+  data.password = hashPassword(data.password);
   try {
     const newUser = await createUser(username, displayName, password);
     return res.status(201).send(newUser);
