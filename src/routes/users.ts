@@ -26,6 +26,18 @@ router.get("/api/users", query("filter").isString().notEmpty().isLength({ min: 3
   return res.send(users);
 })
 
+app.get("/api/users", query("filter").isString().notEmpty().isLength({ min: 3, max: 10 }).withMessage("Must be at least 3-10 characters"), async(req, res) => {
+  const users = await getUserById();
+  const result = validationResult(req);
+  const { filter, value } = req.query;
+
+  if (filter && value) return res.send(
+    users.filter(user => user[filter].includes(value))
+  )
+
+  return res.send(users);
+})
+
 router.get("/api/users/:id", resolveUserById, async(req, res) => {
   const { id } = req.params
   const { findUserIndex } = req;
